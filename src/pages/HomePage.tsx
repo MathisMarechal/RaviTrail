@@ -1,11 +1,13 @@
 import { useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import type { SavedProject } from "../types";
 import { useMyContext } from "../context/Context";
+import { handleCreateNewProjetcFunction } from "../components/handleCreateNewProjectFunction";
+import { handleOpenProjectFunction } from "../components/handleOpenProjectFunction";
+
 
 
 function HomePage () {
-    const {setCurrentProject,savedProjects,setSavedProjects} = useMyContext();
+    const {savedProjects,setSavedProjects} = useMyContext();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -25,19 +27,9 @@ function HomePage () {
         }
     },[setSavedProjects]);
 
-    const handleCreateNewProjetc = () => {
-        if (savedProjects.length <= 2) {
-            setCurrentProject(null);    
-            navigate("/EditPage");
-        } else {
-            window.confirm("Vous n'avez le droit qu'à 3 projets ravitaillment maximum")
-        }
-    }
+    const handleCreateNewProjetc = handleCreateNewProjetcFunction(navigate);
 
-    const handleOpenProject = (project: SavedProject) => {
-        setCurrentProject(project);
-        navigate("/EditPage");
-    }
+    const handleOpenProject = handleOpenProjectFunction(navigate);
 
     const handleDeleteProject = (projectId:number,e:React.MouseEvent) => {
         e.stopPropagation();
@@ -48,6 +40,7 @@ function HomePage () {
             localStorage.setItem('ravitrail_projects',JSON.stringify(updatedProject));
         }
     };
+  
 
     const formatDate = (date:Date) => {
         return new Intl.DateTimeFormat('fr-FR', {
@@ -104,7 +97,7 @@ function HomePage () {
                                     <div className="card-body">
                                         <div className="d-flex justify-content-between align-items-start mb-2">
                                             <h5 className="card-title text-truncate">{project.name}</h5>
-                                            <button className="btn btn-outline-danger btn-sm" onClick={(e)=>{handleDeleteProject(project.id,e)}}> x </button>
+                                            <button className="btn btn-outline-danger btn-sm" onClick={(e)=>handleDeleteProject(project.id,e)}> x </button>
                                         </div>
                                         <p className="card-text">
                                             <strong>Parcours:</strong> {project.nameRun || 'Non défini'}<br/>
