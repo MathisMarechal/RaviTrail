@@ -8,56 +8,39 @@ import { useEffect, useState } from "react";
 import { useMyContext } from "../context/Context";
 
 function EditPage () {
-  
+
   const {nameRun,
     setNameRun,
     xmlDoc,
     setXmlDoc,
-    name,
     setName,
-    kilometre,
     setKilometre,
     ravitos,
     setRavitos,
-    selectedIndex,
     setSelectedIndex,
-    nameItems,
     setNameItems,
-    protItems,
     setProtItems,
-    gluItems,
     setGluItems,
-    quantityItems,
     setQuantityItems,
-    allDistance,
-    allEl,
     distanceTotal,
     setDistanceTotal,
-    distanceNextRavitos,
     setDistanceNextRavitos,
-    denivelePositifNextRavitos,
     setDenivelePositifNextRavitos,
-    deniveleNegatifNextRavitos,
     setDeniveleNegatifNextRavitos,
     denivelePositif,
     setDenivelePositif,
     deniveleNegatif,
     setDeniveleNegatif,
-    tempsEstime,
     setTempsEstime,
-    editMode,
     setEditMode,
     setAllLat,
     setAllLon,
     setAllEl,
     setAllDistance,
-    myProfil,
     currentProject, 
     setCurrentProject, 
     savedProjects, 
     setSavedProjects,
-    isMobile,
-    listNewItems,
   } = useMyContext();
 
   const navigate = useNavigate();
@@ -217,63 +200,14 @@ function EditPage () {
       </div>
     </div>
 
-    <DragAndDrop xmlDoc={xmlDoc} 
-    setXmlDoc={setXmlDoc}
-    nameRun={nameRun}
-    setNameRun={setNameRun}/> 
 
-    {xmlDoc && <CalculOfTrack 
-    xmlDoc={xmlDoc} 
-    setAllLat = {setAllLat} 
-    setAllLon = {setAllLon}
-    setAllEl={setAllEl}
-    setAllDistance = {setAllDistance}
-    distanceTotal = {distanceTotal}
-    setDistanceTotal ={setDistanceTotal}
-    denivelePositif = {denivelePositif}
-    setDenivelePositif = {setDenivelePositif}
-    deniveleNegatif = {deniveleNegatif}
-    setDeniveleNegatif = {setDeniveleNegatif}
-    isMobile = {isMobile}
-    />}
+    <DragAndDrop /> 
 
-    {xmlDoc && 
-    <EditGpx xmlDoc={xmlDoc} 
-    name={name} 
-    setName={setName} 
-    kilometre={kilometre} 
-    setKilometre={setKilometre} 
-    ravitos={ravitos} 
-    setRavitos={setRavitos} 
-    selectedIndex={selectedIndex} 
-    setSelectedIndex={setSelectedIndex} 
-    nameItems={nameItems}
-    setNameItems={setNameItems}
-    protItems={protItems}
-    setProtItems={setProtItems}
-    gluItems={gluItems}
-    setGluItems={setGluItems}
-    quantityItems={quantityItems}
-    setQuantityItems = {setQuantityItems}
-    allDistance = {allDistance} 
-    allEl = {allEl}
-    distanceTotal = {distanceTotal}
-    distanceNextRavitos ={distanceNextRavitos}
-    setDistanceNextRavitos = {setDistanceNextRavitos}
-    denivelePositifNextRavitos = {denivelePositifNextRavitos}
-    setDenivelePositifNextRavitos = {setDenivelePositifNextRavitos}
-    deniveleNegatifNextRavitos = {deniveleNegatifNextRavitos}
-    setDeniveleNegatifNextRavitos = {setDeniveleNegatifNextRavitos}
-    tempsEstime={tempsEstime}
-    setTempsEstime={setTempsEstime}
-    editMode={editMode}
-    setEditMode={setEditMode}
-    isMobile = {isMobile}
-    listNewItems={listNewItems}
-    />}
+    {xmlDoc && <CalculOfTrack />}
+    
+    {xmlDoc && <EditGpx/>}
 
-
-    {<EditTable ravitos={ravitos} selectedIndex={selectedIndex} setRavitos={setRavitos} myProfil={myProfil}/>}
+    {<EditTable />}
 
     <div style={{display:"flex",alignItems:"center", justifyContent:"center"}}>
       <button className={`btn ${isUpdated ? 'btn-success' : 'btn-primary'} mt-4 mb-4`} onClick={handleSaveProject} disabled={!projectName.trim()}>{isUpdated?'✓ Sauvegardé' : 'Sauvegarder'}</button>

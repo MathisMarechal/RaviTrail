@@ -1,4 +1,5 @@
 import { FileUploader } from "react-drag-drop-files";
+import { useMyContext } from "../context/Context";
 
 
 
@@ -6,7 +7,9 @@ const fileType = ["GPX","gpx"];
 
 
 
-function DragAndDrop ({ setXmlDoc, xmlDoc, nameRun, setNameRun }: { setXmlDoc: (xml: Document) => void; xmlDoc: Document | null; nameRun: string | null; setNameRun: React.Dispatch<React.SetStateAction<string | null>> }) {
+function DragAndDrop () {
+
+  const { setXmlDoc, xmlDoc, nameRun, setNameRun } = useMyContext();
 
   const handleChange = (file: any) => {
     const reader = new FileReader();

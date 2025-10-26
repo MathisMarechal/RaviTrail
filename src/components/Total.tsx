@@ -1,8 +1,11 @@
-import type {Ravitaillment,Items} from "../types";
+import { useMyContext } from "../context/Context";
 
 
 
-function Total ({ravitos,selectedIndex}:{ravitos:Ravitaillment[];selectedIndex:number;items: Items[]}) {
+function Total () {
+
+    const {ravitos,selectedIndex} = useMyContext();
+
     const ravitoSelection = ravitos[selectedIndex];
     const totalGlucide = ravitoSelection.items.reduce(
         (sum, items) => sum + (items.glucide || 0), 0

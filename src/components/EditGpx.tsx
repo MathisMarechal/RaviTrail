@@ -1,77 +1,44 @@
 import React, { useEffect, useState } from "react";
-import type {Ravitaillment, ListItems} from "../types";
+import type {Ravitaillment} from "../types";
 import CalculBetweenRavitos from "./calculBetweenRavitos";
 import EstimationTemps from "./EstimationTemps";
+import { useMyContext } from "../context/Context";
 
-function EditGpx({ xmlDoc,
-  name,
-  setName,
-  kilometre,
-  setKilometre,
-  ravitos,
-  setRavitos,
-  selectedIndex,
-  setSelectedIndex,
-  nameItems,
-  setNameItems,
-  protItems,
-  setProtItems,
-  gluItems,
-  setGluItems, 
-  quantityItems,
-  setQuantityItems,
-  allDistance,
-  allEl,
-  distanceTotal,
-  distanceNextRavitos,
-  setDistanceNextRavitos,
-  denivelePositifNextRavitos,
-  setDenivelePositifNextRavitos,
-  deniveleNegatifNextRavitos,
-  setDeniveleNegatifNextRavitos,
-  tempsEstime,
-  setTempsEstime,
-  editMode,
-  setEditMode,
-  isMobile,
-  listNewItems,
-}: {
-  xmlDoc: Document;
-  name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  kilometre: number | "";
-  setKilometre: React.Dispatch<React.SetStateAction<number | "">>;
-  ravitos: Ravitaillment[];
-  setRavitos: React.Dispatch<React.SetStateAction<Ravitaillment[]>>;
-  selectedIndex: number;
-  setSelectedIndex:React.Dispatch<React.SetStateAction<number>>;
-  nameItems: string;
-  setNameItems: React.Dispatch<React.SetStateAction<string>>
-  protItems: number |"";
-  setProtItems:React.Dispatch<React.SetStateAction<number | "">>
-  gluItems: number |"";
-  setGluItems:React.Dispatch<React.SetStateAction<number | "">>
-  quantityItems: number | "";
-  setQuantityItems: React.Dispatch<React.SetStateAction<number | "">>
-  allDistance: number[];
-  allEl: number[];
-  distanceTotal: number;
+function EditGpx() {
 
-  distanceNextRavitos: number;
-  setDistanceNextRavitos: React.Dispatch<React.SetStateAction<number>>;
-
-  denivelePositifNextRavitos: number;
-  setDenivelePositifNextRavitos: React.Dispatch<React.SetStateAction<number>>;
-
-  deniveleNegatifNextRavitos: number;
-  setDeniveleNegatifNextRavitos: React.Dispatch<React.SetStateAction<number>>
-  tempsEstime: number | "";
-  setTempsEstime:React.Dispatch<React.SetStateAction<number | "">>;
-  editMode:boolean;
-  setEditMode:React.Dispatch<React.SetStateAction<boolean>>;
-  isMobile: boolean;
-  listNewItems: ListItems[]}) {
-
+    const { xmlDoc,
+        name,
+        setName,
+        kilometre,
+        setKilometre,
+        ravitos,
+        setRavitos,
+        selectedIndex,
+        setSelectedIndex,
+        nameItems,
+        setNameItems,
+        protItems,
+        setProtItems,
+        gluItems,
+        setGluItems, 
+        quantityItems,
+        setQuantityItems,
+        allDistance,
+        allEl,
+        distanceTotal,
+        distanceNextRavitos,
+        setDistanceNextRavitos,
+        denivelePositifNextRavitos,
+        setDenivelePositifNextRavitos,
+        deniveleNegatifNextRavitos,
+        setDeniveleNegatifNextRavitos,
+        tempsEstime,
+        setTempsEstime,
+        editMode,
+        setEditMode,
+        isMobile,
+        listNewItems,
+    } = useMyContext();
 
 
 

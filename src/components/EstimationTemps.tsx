@@ -1,18 +1,12 @@
-import type { Ravitaillment } from "../types";
 import { useEffect, useState } from "react";
-
-interface EstimationTempsProps {
-    selectedIndex: number;
-    ravitos: Ravitaillment[];
-    tempsEstime: number | "";
-    setTempsEstime: React.Dispatch<React.SetStateAction<number | "">>
-    editMode:boolean;
-    setEditMode:React.Dispatch<React.SetStateAction<boolean>>
-
-}
+import { useMyContext } from "../context/Context";
 
 
-function EstimationTemps({selectedIndex,ravitos,tempsEstime,setTempsEstime,editMode,setEditMode}:EstimationTempsProps) {
+
+
+function EstimationTemps() {
+
+    const {selectedIndex,ravitos,tempsEstime,setTempsEstime,editMode,setEditMode} = useMyContext();
 
     const [selectedNameNextRavito, setSlectedNameNextRavito] = useState<string>("");
 

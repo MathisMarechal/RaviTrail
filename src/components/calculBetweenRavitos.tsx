@@ -1,39 +1,21 @@
-import type { Ravitaillment } from "../types";
+import { useMyContext } from "../context/Context";
 
-interface CalculBetweenRavitosProps {
-  ravitos: Ravitaillment[];
-  selectedIndex: number;
 
-  allDistance: number[];
-  allEl: number[];
+function CalculBetweenRavitos () {
 
-  distanceNextRavitos: number;
-  setDistanceNextRavitos: React.Dispatch<React.SetStateAction<number>>;
-
-  denivelePositifNextRavitos: number;
-  setDenivelePositifNextRavitos: React.Dispatch<React.SetStateAction<number>>;
-
-  deniveleNegatifNextRavitos: number;
-  setDeniveleNegatifNextRavitos: React.Dispatch<React.SetStateAction<number>>;
-
-  setEditMode:React.Dispatch<React.SetStateAction<boolean>>
-
-  isMobile: boolean;
-}
-
-function CalculBetweenRavitos ({ravitos,
-  selectedIndex,
-  allDistance,
-  allEl,
-  distanceNextRavitos,
-  setDistanceNextRavitos,
-  denivelePositifNextRavitos,
-  setDenivelePositifNextRavitos,
-  deniveleNegatifNextRavitos,
-  setDeniveleNegatifNextRavitos,
-  setEditMode,
-  isMobile,
-  }:CalculBetweenRavitosProps) {
+    const {ravitos,
+        selectedIndex,
+        allDistance,
+        allEl,
+        distanceNextRavitos,
+        setDistanceNextRavitos,
+        denivelePositifNextRavitos,
+        setDenivelePositifNextRavitos,
+        deniveleNegatifNextRavitos,
+        setDeniveleNegatifNextRavitos,
+        setEditMode,
+        isMobile,
+    } = useMyContext();
 
     const selectedRavito = ravitos[selectedIndex];
     const selectedNextRavito = ravitos[selectedIndex+1];

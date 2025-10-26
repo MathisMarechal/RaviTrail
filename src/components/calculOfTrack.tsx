@@ -1,44 +1,28 @@
 import { useEffect} from "react";
+import { useMyContext } from "../context/Context";
 
-interface CalculOfTrackProps {
-  xmlDoc: Document;
-  setAllLat: React.Dispatch<React.SetStateAction<number[]>>;
-  setAllLon: React.Dispatch<React.SetStateAction<number[]>>;
-  setAllEl: React.Dispatch<React.SetStateAction<number[]>>;
-  setAllDistance: React.Dispatch<React.SetStateAction<number[]>>;
 
-  distanceTotal: number;
-  setDistanceTotal: React.Dispatch<React.SetStateAction<number>>;
+function CalculOfTrack () {
 
-  denivelePositif: number;
-  setDenivelePositif: React.Dispatch<React.SetStateAction<number>>;
+    const {xmlDoc,
+        setAllLat,
+        setAllLon,
+        setAllEl,
+        setAllDistance,
+        distanceTotal,
+        setDistanceTotal,
+        denivelePositif,
+        setDenivelePositif,
+        deniveleNegatif,
+        setDeniveleNegatif,
+        isMobile
+    } = useMyContext();
 
-  deniveleNegatif: number;
-  setDeniveleNegatif: React.Dispatch<React.SetStateAction<number>>;
-
-  isMobile: boolean;
-
-}
-
-function CalculOfTrack ({xmlDoc,
-  setAllLat,
-  setAllLon,
-  setAllEl,
-  setAllDistance,
-  distanceTotal,
-  setDistanceTotal,
-  denivelePositif,
-  setDenivelePositif,
-  deniveleNegatif,
-  setDeniveleNegatif,
-  isMobile
-  }: CalculOfTrackProps) {
-
-    
-    const trkpts = xmlDoc.getElementsByTagName("trkpt");
 
     useEffect(()=>{
         if (!xmlDoc) return;
+
+        const trkpts = xmlDoc.getElementsByTagName("trkpt");
 
         const latitude: number[] = [];
         const longetude: number[] = [];

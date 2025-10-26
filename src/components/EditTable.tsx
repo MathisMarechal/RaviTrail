@@ -1,8 +1,8 @@
-import type {Ravitaillment, Items} from "../types";
+import type {Items} from "../types";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useState, useEffect } from "react";
 import type { CellContext } from "@tanstack/react-table";
-import type { Profil } from "../types";
+import { useMyContext } from "../context/Context";
 import {
   flexRender,
   getCoreRowModel,
@@ -158,14 +158,10 @@ const columns = [
   }),
 ];
 
-type Props = {
-    ravitos: Ravitaillment[],
-    selectedIndex: number;
-    setRavitos: React.Dispatch<React.SetStateAction<Ravitaillment[]>>;
-    myProfil:Profil | null;
-};
 
-const EditTable=({ ravitos, selectedIndex, setRavitos,myProfil }: Props) => {
+const EditTable=() => {
+
+  const { ravitos, selectedIndex, setRavitos,myProfil } = useMyContext();
 
     if (selectedIndex === -1 || selectedIndex >= ravitos.length || !ravitos[selectedIndex]) {
         return <div></div>;
