@@ -6,6 +6,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../context/Context";
 import { handleSaveProjectFunction } from "../components/handleSavedProjectFunction";
+import { handleBackToHomeFunction } from "../components/handleBackToHomeFunction";
+import { handleBackToProfilFunction } from "../components/handleBackToProfilFunction";
 
 function EditPage () {
 
@@ -106,25 +108,9 @@ function EditPage () {
 
   const handleSaveProject = handleSaveProjectFunction(projectName,isProjectSaved, setIsProjectSaved, setIsUpdated);
 
-  const handleBackToHome = () => {
-    if (!isUpdated && (xmlDoc || ravitos.length > 0)) {
-      if (window.confirm("Vous avez des modifications non sauvegardées. Voulez-vous quitter sans sauvegarder ?")) {
-        navigate('/');
-      }
-    } else {
-      navigate('/');
-    }
-  };
+  const handleBackToHome = handleBackToHomeFunction(isUpdated,navigate);
 
-  const handleBackToProfil = () => {
-    if (!isUpdated) {
-      if (window.confirm("Vous avez des modifications non sauvegardées. Voulez-vous quitter sans sauvegarder ?")) {
-        navigate("/MyProfil");
-      }
-    } else {
-      navigate("/MyProfil")
-    }
-  };
+  const handleBackToProfil = handleBackToProfilFunction(isUpdated,navigate);
 
   return <div>
 
