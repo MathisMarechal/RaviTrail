@@ -1,30 +1,20 @@
 import { useEffect, useState } from "react";
 import type { Profil } from "../types";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMyContext } from "../context/Context";
 
 
-interface MyProfileProps {
-  consGluH: number | "";
-  setConGluH: React.Dispatch<React.SetStateAction<number | "" >>;
+function MyProfil () {
 
-  consProtH: number | "";
-  setConProtH: React.Dispatch<React.SetStateAction<number | "" >>;
-
-  profilName: string;
-  setProfilName: React.Dispatch<React.SetStateAction<string>>;
-
-  myProfil: Profil | null;
-  setMyProfil: React.Dispatch<React.SetStateAction<Profil | null>>;
-}
-
-function MyProfil ({consGluH,
-  setConGluH,
-  consProtH,
-  setConProtH,
-  profilName,
-  setProfilName,
-  myProfil,
-  setMyProfil}:MyProfileProps) {
+    const {consGluH,
+        setConGluH,
+        consProtH,
+        setConProtH,
+        profilName,
+        setProfilName,
+        myProfil,
+        setMyProfil
+    } = useMyContext();
 
     const navigate = useNavigate();
     const location = useLocation();

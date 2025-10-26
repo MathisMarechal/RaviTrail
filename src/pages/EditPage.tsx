@@ -1,137 +1,64 @@
 import DragAndDrop from "../components/DragAndDrop";
 import EditGpx from "../components/EditGpx";
-import type {Ravitaillment, SavedProject, Profil,ListItems} from "../types";
+import type {SavedProject} from "../types";
 import EditTable from "../components/EditTable";
 import CalculOfTrack from "../components/calculOfTrack";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useMyContext } from "../context/Context";
 
-interface EditPageProps {
-
-  nameRun: string | null;
-  setNameRun: React.Dispatch<React.SetStateAction<string | null>>;
-
-  xmlDoc: Document | null;
-  setXmlDoc: (xml: Document | null) => void
-
-  name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-
-  kilometre: number | "";
-  setKilometre: React.Dispatch<React.SetStateAction<number | "" >>;
-
-  ravitos: Ravitaillment[];
-  setRavitos: React.Dispatch<React.SetStateAction<Ravitaillment[]>>;
-
-  selectedIndex: number;
-  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
-
-  nameItems: string;
-  setNameItems: React.Dispatch<React.SetStateAction<string>>;
-
-  protItems: number | "";
-  setProtItems: React.Dispatch<React.SetStateAction<number | "" >>;
-
-  gluItems: number | "";
-  setGluItems: React.Dispatch<React.SetStateAction<number | "" >>;
-
-  quantityItems: number | "";
-  setQuantityItems: React.Dispatch<React.SetStateAction<number | "" >>;
-
-  allDistance: number[];
-  allEl: number[];
-
-  distanceTotal: number;
-  setDistanceTotal: React.Dispatch<React.SetStateAction<number>>;
-
-  distanceNextRavitos: number;
-  setDistanceNextRavitos: React.Dispatch<React.SetStateAction<number>>;
-
-  denivelePositifNextRavitos: number;
-  setDenivelePositifNextRavitos: React.Dispatch<React.SetStateAction<number>>;
-
-  deniveleNegatifNextRavitos: number;
-  setDeniveleNegatifNextRavitos: React.Dispatch<React.SetStateAction<number>>;
-
-  denivelePositif: number;
-  setDenivelePositif: React.Dispatch<React.SetStateAction<number>>;
-
-  deniveleNegatif: number;
-  setDeniveleNegatif: React.Dispatch<React.SetStateAction<number>>;
-
-  tempsEstime: number | "";
-  setTempsEstime: React.Dispatch<React.SetStateAction<number | "" >>;
-
-  editMode: boolean;
-  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-
-  setAllLat: React.Dispatch<React.SetStateAction<number[]>>;
-  setAllLon: React.Dispatch<React.SetStateAction<number[]>>;
-  setAllEl: React.Dispatch<React.SetStateAction<number[]>>;
-  setAllDistance: React.Dispatch<React.SetStateAction<number[]>>;
-
-  myProfil: Profil | null;
-
-  currentProject: SavedProject | null;
-  setCurrentProject: React.Dispatch<React.SetStateAction<SavedProject | null>>;
-  savedProjects: SavedProject[];
-  setSavedProjects: React.Dispatch<React.SetStateAction<SavedProject[]>>;
-
-  isMobile: boolean;
-
-  listNewItems: ListItems[];
-}
-
-function EditPage ({nameRun,
-  setNameRun,
-  xmlDoc,
-  setXmlDoc,
-  name,
-  setName,
-  kilometre,
-  setKilometre,
-  ravitos,
-  setRavitos,
-  selectedIndex,
-  setSelectedIndex,
-  nameItems,
-  setNameItems,
-  protItems,
-  setProtItems,
-  gluItems,
-  setGluItems,
-  quantityItems,
-  setQuantityItems,
-  allDistance,
-  allEl,
-  distanceTotal,
-  setDistanceTotal,
-  distanceNextRavitos,
-  setDistanceNextRavitos,
-  denivelePositifNextRavitos,
-  setDenivelePositifNextRavitos,
-  deniveleNegatifNextRavitos,
-  setDeniveleNegatifNextRavitos,
-  denivelePositif,
-  setDenivelePositif,
-  deniveleNegatif,
-  setDeniveleNegatif,
-  tempsEstime,
-  setTempsEstime,
-  editMode,
-  setEditMode,
-  setAllLat,
-  setAllLon,
-  setAllEl,
-  setAllDistance,
-  myProfil,
-  currentProject, 
-  setCurrentProject, 
-  savedProjects, 
-  setSavedProjects,
-  isMobile,
-  listNewItems,
-}: EditPageProps) {
+function EditPage () {
+  
+  const {nameRun,
+    setNameRun,
+    xmlDoc,
+    setXmlDoc,
+    name,
+    setName,
+    kilometre,
+    setKilometre,
+    ravitos,
+    setRavitos,
+    selectedIndex,
+    setSelectedIndex,
+    nameItems,
+    setNameItems,
+    protItems,
+    setProtItems,
+    gluItems,
+    setGluItems,
+    quantityItems,
+    setQuantityItems,
+    allDistance,
+    allEl,
+    distanceTotal,
+    setDistanceTotal,
+    distanceNextRavitos,
+    setDistanceNextRavitos,
+    denivelePositifNextRavitos,
+    setDenivelePositifNextRavitos,
+    deniveleNegatifNextRavitos,
+    setDeniveleNegatifNextRavitos,
+    denivelePositif,
+    setDenivelePositif,
+    deniveleNegatif,
+    setDeniveleNegatif,
+    tempsEstime,
+    setTempsEstime,
+    editMode,
+    setEditMode,
+    setAllLat,
+    setAllLon,
+    setAllEl,
+    setAllDistance,
+    myProfil,
+    currentProject, 
+    setCurrentProject, 
+    savedProjects, 
+    setSavedProjects,
+    isMobile,
+    listNewItems,
+  } = useMyContext();
 
   const navigate = useNavigate();
   const location = useLocation();

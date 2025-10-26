@@ -1,5 +1,4 @@
-import type {Ravitaillment,SavedProject} from "../types";
-import { useState, useMemo, useEffect} from "react";
+import { useState, useMemo,} from "react";
 import type { CellContext, ColumnFiltersState} from "@tanstack/react-table";
 import {
   getCoreRowModel,
@@ -10,6 +9,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import Filters from "../components/filters";
 import EditableCellCheck from "../components/EditableCellCheck";
+import { useMyContext } from "../context/Context";
 
 
 
@@ -46,11 +46,11 @@ const columns = [
     },
 ]
 
-type Props = {
-    ravitos: Ravitaillment[],
-};
 
-function Recap ({ravitos}:Props) {
+function Recap () {
+
+    const {ravitos} = useMyContext();
+
     const myData = useMemo(()=>
         ravitos.flatMap(ravito => 
             ravito.items.map(item => ({

@@ -1,14 +1,11 @@
 import { useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { SavedProject } from "../types";
+import { useMyContext } from "../context/Context";
 
-interface HomePageProps {
-  setCurrentProject: React.Dispatch<React.SetStateAction<SavedProject | null>>;
-  savedProjects: SavedProject[];
-  setSavedProjects: React.Dispatch<React.SetStateAction<SavedProject[]>>;
-}
 
-function HomePage ({setCurrentProject,savedProjects,setSavedProjects}:HomePageProps) {
+function HomePage () {
+    const {setCurrentProject,savedProjects,setSavedProjects} = useMyContext();
     const navigate = useNavigate();
     const location = useLocation();
 

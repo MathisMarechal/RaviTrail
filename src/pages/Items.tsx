@@ -8,6 +8,7 @@ import {
 import type { CellContext } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMyContext } from "../context/Context";
 
 
 const columnHelper = createColumnHelper<ListItems>();
@@ -152,18 +153,9 @@ const columns = [
 
 
 
-interface ItemsProps {
-    nameNewItems: string;
-    setNameNewItems: React.Dispatch<React.SetStateAction<string>>;
-    proNewItems: number | "";
-    setProNewItems:React.Dispatch<React.SetStateAction<number | "">>
-    gluNewItems: number |"";
-    setGluNewItems:React.Dispatch<React.SetStateAction<number | "">>
-    listNewItems: ListItems[];
-    setListNewItems:React.Dispatch<React.SetStateAction<ListItems[]>>;
-}
+function Items () {
 
-function Items ({nameNewItems,setNameNewItems,proNewItems,setProNewItems,gluNewItems,setGluNewItems,listNewItems,setListNewItems}:ItemsProps) {
+  const {nameNewItems,setNameNewItems,proNewItems,setProNewItems,gluNewItems,setGluNewItems,listNewItems,setListNewItems} = useMyContext();
 
     const [originalData, setOriginalData] = useState<ListItems[]>([]);
     const [data, setData] = useState<ListItems[]>([]);
