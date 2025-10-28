@@ -9,6 +9,7 @@ import type { CellContext } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/Context";
+import { handleSubmitNewItemsFunction } from "../components/handleSubmitNewItemsFunction";
 
 
 const columnHelper = createColumnHelper<ListItems>();
@@ -154,7 +155,6 @@ const columns = [
 
 
 function Items () {
-
   const {nameNewItems,setNameNewItems,proNewItems,setProNewItems,gluNewItems,setGluNewItems,listNewItems,setListNewItems} = useMyContext();
 
     const [originalData, setOriginalData] = useState<ListItems[]>([]);
@@ -222,27 +222,6 @@ function Items () {
             },
         });
 
-    function handleSubmitNewItems(e: React.FormEvent) {
-        e.preventDefault();
-        console.log(nameNewItems,proNewItems,gluNewItems);
-        addNewItems(nameNewItems,Number(proNewItems),Number(gluNewItems));
-        setNameNewItems("");
-        setProNewItems("");
-        setGluNewItems("");
-    }
-
-    function addNewItems(nameNewItems:string, proNewItems:number, gluNewItems:number) {
-        const newItems: ListItems = {
-            id: Date.now(),
-            name: nameNewItems,
-            proteine: proNewItems,
-            glucide: gluNewItems,
-        };
-
-        setListNewItems([...listNewItems,newItems]);
-    }
-
-
     useEffect(()=>{
     const savedItems = localStorage.getItem("items");
         if (savedItems) {
@@ -268,7 +247,7 @@ function Items () {
             <h1 style={{marginBottom:"50px",zIndex:1,color:"white",fontStyle:"bold"}}>Mes items</h1>
             <div style={{display:"flex", flexDirection:"column",alignContent:"center",alignItems:"center",justifyContent:"center"}}>
                 <div className="card p-3 m-2 border" style={{width:"70%"}}>
-                    <form onSubmit={handleSubmitNewItems}>
+                    <form onSubmit={(e)=>handleSubmitNewItemsFunction(e,nameNewItems,Number(proNewItems),Number(gluNewItems),setListNewItems,listNewItems,setNameNewItems,setProNewItems,setGluNewItems)}>
                         <p>Nouvelle item</p>
                         <div>
                             <label className="p-2">Nom du produit</label>
