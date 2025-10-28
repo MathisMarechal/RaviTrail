@@ -23,20 +23,7 @@ function EditGpx() {
         setGluItems, 
         quantityItems,
         setQuantityItems,
-        allDistance,
-        allEl,
         distanceTotal,
-        distanceNextRavitos,
-        setDistanceNextRavitos,
-        denivelePositifNextRavitos,
-        setDenivelePositifNextRavitos,
-        deniveleNegatifNextRavitos,
-        setDeniveleNegatifNextRavitos,
-        tempsEstime,
-        setTempsEstime,
-        editMode,
-        setEditMode,
-        isMobile,
         listNewItems,
     } = useMyContext();
 
@@ -209,27 +196,11 @@ function EditGpx() {
     </div>
 
     {xmlDoc && 
-        <CalculBetweenRavitos ravitos={ravitos} 
-        selectedIndex={selectedIndex}
-        allDistance = {allDistance} 
-        allEl = {allEl}
-        distanceNextRavitos ={distanceNextRavitos}
-        setDistanceNextRavitos = {setDistanceNextRavitos}
-        denivelePositifNextRavitos = {denivelePositifNextRavitos}
-        setDenivelePositifNextRavitos = {setDenivelePositifNextRavitos}
-        deniveleNegatifNextRavitos = {deniveleNegatifNextRavitos}
-        setDeniveleNegatifNextRavitos = {setDeniveleNegatifNextRavitos}
-        setEditMode={setEditMode}
-        isMobile = {isMobile}/>
+        <CalculBetweenRavitos />
     }
 
     {xmlDoc &&
-    <EstimationTemps selectedIndex={selectedIndex}
-    ravitos={ravitos}
-    tempsEstime={tempsEstime}
-    setTempsEstime={setTempsEstime}
-    editMode={editMode}
-    setEditMode={setEditMode}></EstimationTemps>}
+    <EstimationTemps/>}
 
     <div>
         {selectedIndex !== -1 &&
