@@ -1,5 +1,7 @@
 import { useEffect} from "react";
 import { useMyContext } from "../context/Context";
+import { distanceCalculFunction } from "./distanceCalculFunction";
+import { valeursTotalsFunction } from "./valeursTotalesFunction";
 
 
 function CalculOfTrack () {
@@ -50,68 +52,17 @@ function CalculOfTrack () {
             const lat2 = latitude[i+1];
             const lon1 = longetude[i];
             const lon2 = longetude[i+1];
-            distance.push(distanceCalcul(lat1,lat2,lon1,lon2));
+            distance.push(distanceCalculFunction(lat1,lat2,lon1,lon2));
         }
 
         setAllDistance(distance);
 
-        const { distanceTotal, denivelePositif, deniveleNegatif } = valeursTotals(distance,elevation);
+        const { distanceTotal, denivelePositif, deniveleNegatif } = valeursTotalsFunction(distance,elevation);
         setDistanceTotal(distanceTotal);
         setDenivelePositif(denivelePositif);
         setDeniveleNegatif(deniveleNegatif);
 
     },[xmlDoc]);
-
-
-    function distanceCalcul (lat1:number,lat2:number,lon1:number,lon2:number) {
-        const r = 6371;
-        const p = Math.PI/180;
-
-        const a = 0.5 - Math.cos((lat1-lat2)*p) / 2 + Math.cos(lat1*p) * Math.cos(lat2*p)*(1-Math.cos((lon2-lon1)*p))/2;
-
-        return 2*r*Math.asin(Math.sqrt(a));
-    };
-
-
-    function valeursTotals (distance: number[],elevation:number[]) {
-        const distanceTotal = distance.reduce((acc,distance)=>acc+distance,0);
-
-        const {moyennePositif,moyenneNegative} = moyenneDesDeniv(elevation)
-
-        console.log(moyennePositif);
-        console.log(moyenneNegative)
-
-        let denivelePositif = 0;
-        let deniveleNegatif = 0;
-        for (let i=0; i<elevation.length;i++) {
-            const diff = elevation[i + 1] - elevation[i];
-            const test = elevation[i + 2] - elevation[i];
-            if (test>moyennePositif) {
-                denivelePositif += diff;
-            } 
-            if (test<-moyenneNegative) {
-                deniveleNegatif += Math.abs(diff)
-            };
-        };
-        return {distanceTotal, denivelePositif, deniveleNegatif}
-    };
-
-    function moyenneDesDeniv (elevation:number[]) {
-        const denivPo = [];
-        const denivNe = [];
-        for (let i=0; i<elevation.length-1;i++) {
-            const diff = elevation[i + 1] - elevation[i];
-            if (diff>0) {
-                denivPo.push(diff);
-            } else if (diff<0) {
-                denivNe.push(Math.abs(diff));
-            }
-        };
-        const moyennePositif = denivPo.reduce((acc,denivPo)=>acc+denivPo,0)/denivPo.length
-        const moyenneNegative = denivNe.reduce((acc,denivNe)=>acc+denivNe,0)/denivNe.length
-        return { moyennePositif, moyenneNegative }
-    };
-    
     
     return (
         <>
