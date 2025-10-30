@@ -7,7 +7,7 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 import { useLocation, useNavigate } from "react-router-dom";
-import Filters from "../components/filters";
+import Filters from "../components/AllFunctions/filters";
 import EditableCellCheck from "../components/EditableCellCheck";
 import { useMyContext } from "../context/Context";
 

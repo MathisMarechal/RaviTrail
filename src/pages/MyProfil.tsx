@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/Context";
-import { handleSubmitProfilFunction } from "../components/handleSubmitProfil";
-import { handleEditProfilFunction } from "../components/handleEditProfil";
+import { handleSubmitProfilFunction } from "../components/AllFunctions/handleSubmitProfil";
+import { handleEditProfilFunction } from "../components/AllFunctions/handleEditProfil";
 
 
 function MyProfil () {

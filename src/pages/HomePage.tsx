@@ -1,8 +1,8 @@
 import { useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/Context";
-import { handleCreateNewProjetcFunction } from "../components/handleCreateNewProjectFunction";
-import { handleOpenProjectFunction } from "../components/handleOpenProjectFunction";
+import { handleCreateNewProjetcFunction } from "../components/AllFunctions/handleCreateNewProjectFunction";
+import { handleOpenProjectFunction } from "../components/AllFunctions/handleOpenProjectFunction";
 
 
 

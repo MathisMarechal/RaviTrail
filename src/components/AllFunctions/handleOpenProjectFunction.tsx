@@ -1,5 +1,5 @@
-import { useMyContext } from "../context/Context";
-import type { SavedProject } from "../types";
+import { useMyContext } from "../../context/Context";
+import type { SavedProject } from "../../types";
 
 export const handleOpenProjectFunction = (navigate:Function) => {
 

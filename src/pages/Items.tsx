@@ -9,7 +9,7 @@ import type { CellContext } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/Context";
-import { handleSubmitNewItemsFunction } from "../components/handleSubmitNewItemsFunction";
+import { handleSubmitNewItemsFunction } from "../components/AllFunctions/handleSubmitNewItemsFunction";
 
 
 const columnHelper = createColumnHelper<ListItems>();

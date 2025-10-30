@@ -1,7 +1,7 @@
 import { useEffect} from "react";
 import { useMyContext } from "../context/Context";
-import { distanceCalculFunction } from "./distanceCalculFunction";
-import { valeursTotalsFunction } from "./valeursTotalesFunction";
+import { distanceCalculFunction } from "./AllFunctions/distanceCalculFunction";
+import { valeursTotalsFunction } from "./AllFunctions/valeursTotalesFunction";
 
 
 function CalculOfTrack () {

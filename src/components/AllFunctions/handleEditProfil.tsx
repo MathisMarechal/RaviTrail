@@ -1,4 +1,4 @@
-import { useMyContext } from "../context/Context";
+import { useMyContext } from "../../context/Context";
 
 export function handleEditProfilFunction (e:React.MouseEvent,setEditedProfil:Function) {
     const {setProfilName,setConGluH,setConProtH,profilName,consGluH,consProtH} = useMyContext();

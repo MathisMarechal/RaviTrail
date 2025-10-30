@@ -5,9 +5,9 @@ import CalculOfTrack from "../components/calculOfTrack";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../context/Context";
-import { handleSaveProjectFunction } from "../components/handleSavedProjectFunction";
-import { handleBackToHomeFunction } from "../components/handleBackToHomeFunction";
-import { handleBackToProfilFunction } from "../components/handleBackToProfilFunction";
+import { handleSaveProjectFunction } from "../components/AllFunctions/handleSavedProjectFunction";
+import { handleBackToHomeFunction } from "../components/AllFunctions/handleBackToHomeFunction";
+import { handleBackToProfilFunction } from "../components/AllFunctions/handleBackToProfilFunction";
 
 function EditPage () {
 

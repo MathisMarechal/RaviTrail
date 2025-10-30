@@ -1,5 +1,5 @@
-import { useMyContext } from "../context/Context";
-import type { Profil } from "../types";
+import { useMyContext } from "../../context/Context";
+import type { Profil } from "../../types";
 
 export function handleSubmitProfilFunction (e:React.FormEvent,setEditedProfil:Function) {
     const {setMyProfil,profilName,consGluH,consProtH} = useMyContext();

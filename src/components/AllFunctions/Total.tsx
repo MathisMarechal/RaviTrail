@@ -1,6 +1,4 @@
-import { useMyContext } from "../context/Context";
-
-
+import { useMyContext } from "../../context/Context";
 
 function Total () {
 

@@ -1,5 +1,5 @@
-import { useMyContext } from "../context/Context";
-import type {SavedProject} from "../types";
+import { useMyContext } from "../../context/Context";
+import type {SavedProject} from "../../types";
 
 export const handleSaveProjectFunction = (projectName:string,isProjectSaved:boolean, setIsProjectSaved:React.Dispatch<boolean>, setIsUpdated:React.Dispatch<boolean>) => {
 

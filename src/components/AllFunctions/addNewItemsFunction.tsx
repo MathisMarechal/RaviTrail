@@ -1,4 +1,4 @@
-import type { ListItems } from "../types";
+import type { ListItems } from "../../types";
 
 export function addNewItemsFunction(nameNewItems:string, proNewItems:number, gluNewItems:number,setListNewItems:Function,listNewItems:ListItems[]) {
     const newItems: ListItems = {

@@ -1,4 +1,4 @@
-import { useMyContext } from "../context/Context";
+import { useMyContext } from "../../context/Context";
 
 
 export const handleBackToHomeFunction = (isUpdated:boolean,navigate:Function) => {
