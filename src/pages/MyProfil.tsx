@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import type { Profil } from "../types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/Context";
+import { handleSubmitProfilFunction } from "../components/handleSubmitProfil";
+import { handleEditProfilFunction } from "../components/handleEditProfil";
 
 
 function MyProfil () {
@@ -19,27 +20,6 @@ function MyProfil () {
     const navigate = useNavigate();
     const location = useLocation();
     const [editedProfil,setEditedProfil] = useState(false)
-
-    
-    function handleSubmitProfil (e: React.FormEvent) {
-        e.preventDefault();
-        const newProfil: Profil = {
-            id: Date.now(),
-            name: profilName,
-            consGlu: consGluH,
-            consProt: consProtH
-        };
-        setMyProfil(newProfil)
-        setEditedProfil(true)
-
-    }
-
-    function handleEditProfil () {
-        setEditedProfil(false);
-        setProfilName(profilName);
-        setConGluH(consGluH);
-        setConProtH(consProtH);
-    }
 
     useEffect(()=>{
         const savedProfil = localStorage.getItem("profil");
@@ -70,7 +50,7 @@ function MyProfil () {
             <h1 style={{marginBottom:"50px",zIndex:1,color:"white",fontStyle:"bold"}}>Mon profil</h1>
             {!editedProfil &&
             <div className="card p-3 m-2 border containerMyProfil">
-                <form onSubmit={handleSubmitProfil}>
+                <form onSubmit={(e)=>handleSubmitProfilFunction(e,setEditedProfil)}>
                     <div>
                         <label className="p-2">Nom du profil</label>
                         <input type="string" className="form-control" placeholder="Entrer le nom de votre profil" value={profilName} onChange={(e)=>setProfilName(e.target.value)}></input>
@@ -93,7 +73,7 @@ function MyProfil () {
                     <p>Consomtion de glucide par heure: {myProfil.consGlu} g/h</p>
                     <p>Consomtion de proteine par heure: {myProfil.consProt} g/h</p>
                     <div style={{display:"flex",justifyContent:"flex-end"}}>
-                        <button className="btn btn-secondary" onClick={handleEditProfil}>Modifier</button>
+                        <button className="btn btn-secondary" onClick={(e)=>handleEditProfilFunction(e,setEditedProfil)}>Modifier</button>
                     </div>
                 </div>
             }
