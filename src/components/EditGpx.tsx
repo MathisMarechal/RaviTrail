@@ -4,6 +4,8 @@ import EstimationTemps from "./EstimationTemps";
 import { useMyContext } from "../context/Context";
 import { useAddRavito } from "./AllFunctions/addRavitos";
 import { useHandleIndex } from "./AllFunctions/handleIndexFunction";
+import { useAddItems } from "./AllFunctions/addItems";
+import { useDeleteRavito } from "./AllFunctions/deleteRavitos";
 
 function EditGpx() {
 
@@ -13,9 +15,7 @@ function EditGpx() {
         kilometre,
         setKilometre,
         ravitos,
-        setRavitos,
         selectedIndex,
-        setSelectedIndex,
         nameItems,
         setNameItems,
         protItems,
@@ -30,6 +30,8 @@ function EditGpx() {
 
     const {addRavitoFunction} = useAddRavito();
     const {handleIndexFunction} = useHandleIndex();
+    const {addItemsFunction} = useAddItems();
+    const {deleteRavitoFunction} = useDeleteRavito();
 
 
 
@@ -56,51 +58,16 @@ function EditGpx() {
         setKilometre("");
     }
 
-    function addItems(ravitosId:number, nameItems:string,protItems:number, gluItems:number, quantityItems:number) {
-        const statusInitial = "En cours";
-        setRavitos(
-            ravitos.map((r) =>
-                r.id === ravitosId ? { ...r, items: [...r.items, { id: Date.now(), name: nameItems, proteine: protItems, glucide: gluItems, quantity: quantityItems,status: statusInitial }]} : r
-            )
-        );
-    }
-
     function handleSubmitItems(e: React.FormEvent) {
         e.preventDefault();
         if (selectedIndex === -1) return;
         const ravitosId = ravitos[selectedIndex].id;
-        addItems(ravitosId,nameItems, Number(protItems), Number(gluItems), Number(quantityItems));
+        addItemsFunction(ravitosId,nameItems, Number(protItems), Number(gluItems), Number(quantityItems));
         setNameItems("");
         setGluItems("");
         setProtItems("");
         setQuantityItems("");
     }
-
-    const deleteRavito = (e: React.MouseEvent<HTMLButtonElement>, indexToDelete: number) => {
-        e.stopPropagation();
-        const ravitoToDelete = ravitos[indexToDelete];
-        console.log(`Tentative de suppression du ravitaillement: ${ravitoToDelete?.name}`);
-        console.log(`Index Ã  supprimer: ${indexToDelete}, Index sÃ©lectionnÃ©: ${selectedIndex}`);
-        const confirmDelete = window.confirm(
-            `ÃŠtes-vous sÃ»r de vouloir supprimer ce ravitaillement "${ravitoToDelete?.name}" et tous ses items ?`
-        );
-        if (confirmDelete) {
-            console.log(`Suppression confirmÃ©e pour: ${ravitoToDelete?.name}`);
-            setRavitos((prev) => prev.filter((_, i) => i !== indexToDelete));
-            if (selectedIndex === indexToDelete) {
-                console.log("L'élément sélectionné a été supprimé - désélection");
-                setSelectedIndex(-1);
-                setSelectedName("");
-                setNameItems("");
-                setProtItems("");
-                setGluItems("");
-            } else if (selectedIndex > indexToDelete) {
-                console.log(`Ajustement de l'index sélectionné: ${selectedIndex} -> ${selectedIndex - 1}`);
-                setSelectedIndex(selectedIndex - 1);
-            }
-             console.log("Suppression terminée");
-        }
-    };
 
     const selectButton = () => {
         setSelectedButton(prev => !prev); 
@@ -168,7 +135,7 @@ function EditGpx() {
             <ul className="list-group">
                 {ravitos.map((r,index) => (
                     <li  className={selectedIndex===index ? "list-group-item active d-flex justify-content-between align-items-center" : "list-group-item d-flex justify-content-between align-items-center"} key={r.id} onClick={() => handleIndexFunction(index,r.name,setSelectedName)}>
-                        {r.distance} km {r.name} <button className="btn btn-secondary btn-sm" onClick={(e) => deleteRavito(e, index)}>Supprimer</button>
+                        {r.distance} km {r.name} <button className="btn btn-secondary btn-sm" onClick={(e) => deleteRavitoFunction(e, index,setSelectedName)}>Supprimer</button>
                     </li>
                 )) }
             </ul>
