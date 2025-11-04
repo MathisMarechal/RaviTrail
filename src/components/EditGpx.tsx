@@ -6,6 +6,7 @@ import { useAddRavito } from "./AllFunctions/addRavitos";
 import { useHandleIndex } from "./AllFunctions/handleIndexFunction";
 import { useAddItems } from "./AllFunctions/addItems";
 import { useDeleteRavito } from "./AllFunctions/deleteRavitos";
+import { useAutoFillForm } from "./AllFunctions/autoFillForm";
 
 function EditGpx() {
 
@@ -32,6 +33,7 @@ function EditGpx() {
     const {handleIndexFunction} = useHandleIndex();
     const {addItemsFunction} = useAddItems();
     const {deleteRavitoFunction} = useDeleteRavito();
+    const {autoFillFormFunction} = useAutoFillForm();
 
 
 
@@ -73,18 +75,6 @@ function EditGpx() {
         setSelectedButton(prev => !prev); 
     };
 
-    function autoFillForm (e: React.ChangeEvent<HTMLSelectElement>) {
-        const selectedName = e.target.value;
-        if (!selectedName) return;
-
-        const selectedItems = listNewItems.find(item => item.name === selectedName)
-
-        if (selectedItems) {
-            setNameItems(selectedItems.name);
-            setGluItems(selectedItems.glucide);
-            setProtItems(selectedItems.proteine);
-        }
-    }
     
     useEffect(()=> {
 
@@ -159,7 +149,7 @@ function EditGpx() {
                     <label className="p-2">Nom du produit</label>
                     <button type="button" className={selectedButton ? "btn btn-success m-2" : "btn btn-primary m-2"} style={{fontSize:"0.5em",fontWeight:"bold"}} onClick={selectButton}>Items Enregistré ?</button>
                     {selectedButton &&
-                        <select className="form-select" onChange={autoFillForm}>
+                        <select className="form-select" onChange={autoFillFormFunction}>
                             <option selected>Choisisez un items de votre inventaire enregistré</option>
                             {listNewItems.map((r) => (
                                 <option  key={r.id}>
