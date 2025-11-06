@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/Context";
-import { handleSubmitProfilFunction } from "../components/AllFunctions/handleSubmitProfil";
-import { handleEditProfilFunction } from "../components/AllFunctions/handleEditProfil";
+import { useHandleSubmitProfil } from "../components/AllFunctions/handleSubmitProfil";
+import { useHandleEditProfil } from "../components/AllFunctions/handleEditProfil";
+import { supabase } from "../supabase-client";
 
 
 function MyProfil () {
@@ -17,27 +18,31 @@ function MyProfil () {
         setMyProfil
     } = useMyContext();
 
+    const {handleSubmitProfilFunction} = useHandleSubmitProfil();
+    const {handleEditProfilFunction} = useHandleEditProfil();
+
     const navigate = useNavigate();
     const location = useLocation();
     const [editedProfil,setEditedProfil] = useState(false)
 
-    useEffect(()=>{
-        const savedProfil = localStorage.getItem("profil");
-        if (!savedProfil) {
-            return
-        }
-        if (savedProfil) {
-            const parsed = JSON.parse(savedProfil);
-            setMyProfil(parsed)
+    const fetchMyProfil = async () => {
+        const {error,data} = await supabase.from("myProfil").select("*").limit(1).single();
+        
+        if (data) {
+            setMyProfil(data)
             setEditedProfil(true)
+        } else return
+
+        if (error) {
+            console.error("Error load task: ",error.message);
+            return;
         }
-    },[])
+        
+    }
 
     useEffect(()=>{
-        if (myProfil) {
-            localStorage.setItem("profil",JSON.stringify(myProfil));
-        }
-    },[myProfil])
+        fetchMyProfil()
+    },[])
 
     return(
         <>

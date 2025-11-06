@@ -1,12 +1,17 @@
 import { useMyContext } from "../../context/Context";
 
-export function handleEditProfilFunction (e:React.MouseEvent,setEditedProfil:Function) {
+export function useHandleEditProfil() {
     const {setProfilName,setConGluH,setConProtH,profilName,consGluH,consProtH} = useMyContext();
-    e.preventDefault();
-    return (
-        setEditedProfil(false),
-        setProfilName(profilName),
-        setConGluH(consGluH),
-        setConProtH(consProtH)
-    );
+
+    function handleEditProfilFunction (e:React.MouseEvent,setEditedProfil:Function) {
+        e.preventDefault();
+        return (
+            setProfilName(profilName),
+            setConGluH(consGluH),
+            setConProtH(consProtH),
+            setEditedProfil(false)
+        );
+    }
+
+    return {handleEditProfilFunction}
 }
