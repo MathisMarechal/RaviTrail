@@ -4,6 +4,7 @@ import { useMyContext } from "../context/Context";
 import { useHandleSubmitProfil } from "../components/AllFunctions/handleSubmitProfil";
 import { useHandleEditProfil } from "../components/AllFunctions/handleEditProfil";
 import { supabase } from "../supabase-client";
+import { LogOut } from "../components/AllFunctions/logOut";
 
 
 function MyProfil () {
@@ -50,7 +51,7 @@ function MyProfil () {
             <div style={{ cursor: "pointer", textDecoration: location.pathname=== "/" ? "underline" : "none" , color:"white",fontWeight:"bold",textUnderlineOffset:"8px"}} onClick={()=>navigate("/")}>Home</div>
             <div style={{color:"white ",fontWeight:"bold"}}>RaviTrail</div>
             <div style={{cursor:"pointer",textDecoration: location.pathname=== "/MyProfil" ? "underline" : "none" ,color:"white",fontWeight:"bold",textUnderlineOffset:"8px"}} onClick={()=>navigate("/MyProfil")}>Profil</div>
-         </div>
+        </div>
         <div className="bannerMyProfil" style={{display:"flex", flexDirection:"column",alignContent:"center",alignItems:"center",justifyContent:"center"}}>
             <h1 style={{marginBottom:"50px",zIndex:1,color:"white",fontStyle:"bold"}}>Mon profil</h1>
             {!editedProfil &&
@@ -82,6 +83,9 @@ function MyProfil () {
                     </div>
                 </div>
             }
+            <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "20px", zIndex:"1" }}>
+                <button  className="btn btn-danger" onClick={LogOut}>LogOut</button>
+            </div>
         </div>
         </>
     )

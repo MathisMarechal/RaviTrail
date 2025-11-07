@@ -7,6 +7,10 @@ export function Declaration () {
     const [consProtH, setConProtH] = useState<number | "">("");
     const [profilName, setProfilName] = useState<string>("");
     const [myProfil, setMyProfil] = useState<Profil | null>(null);
+    const [isSignUp, setIsSignUp] = useState<boolean>(false);
+    const [email,setEmail] = useState<string>("");
+    const [password,setPassword] = useState<string>("");
+    const [session,setSession] = useState<any>(null);
 
     // États pour le projet en cours d'édition
     const [nameRun, setNameRun] = useState<string | null>(null);
@@ -63,6 +67,10 @@ export function Declaration () {
         consProtH, setConProtH,
         profilName, setProfilName,
         myProfil, setMyProfil,
+        isSignUp, setIsSignUp,
+        email, setEmail,
+        password, setPassword,
+        session, setSession,
         nameRun, setNameRun,
         xmlDoc, setXmlDoc,
         name, setName,
