@@ -5,6 +5,7 @@ import { useHandleSubmitProfil } from "../components/AllFunctions/handleSubmitPr
 import { useHandleEditProfil } from "../components/AllFunctions/handleEditProfil";
 import { supabase } from "../supabase-client";
 import { LogOut } from "../components/AllFunctions/logOut";
+import type { Profil } from "../types";
 
 
 function MyProfil () {
@@ -16,7 +17,8 @@ function MyProfil () {
         profilName,
         setProfilName,
         myProfil,
-        setMyProfil
+        setMyProfil,
+        session
     } = useMyContext();
 
     const {handleSubmitProfilFunction} = useHandleSubmitProfil();
@@ -27,7 +29,7 @@ function MyProfil () {
     const [editedProfil,setEditedProfil] = useState(false)
 
     const fetchMyProfil = async () => {
-        const {error,data} = await supabase.from("myProfil").select("*").limit(1).single();
+        const {error,data} = await supabase.from("myProfil").select("*").eq("email",session.user.email).single();
         
         if (data) {
             setMyProfil(data)
@@ -43,6 +45,18 @@ function MyProfil () {
 
     useEffect(()=>{
         fetchMyProfil()
+    },[])
+
+    useEffect(()=>{
+        const channel = supabase.channel("myProfil-channel");
+        channel.on("postgres_changes",{event:"INSERT",schema:"public",table:"myProfil"},
+            (payload) => {
+                const newProfil = payload.new as Profil;
+                setMyProfil(newProfil);
+            }
+        ).subscribe((status)=>{
+            console.log("Subscription:", status)
+        });
     },[])
 
     return(

@@ -3,7 +3,7 @@ import { supabase } from "../../supabase-client";
 import type { Profil } from "../../types";
 
 export function useHandleSubmitProfil(){
-    const {setMyProfil,profilName,consGluH,consProtH,myProfil} = useMyContext();
+    const {setMyProfil,profilName,consGluH,consProtH,myProfil,session} = useMyContext();
 
     async function handleSubmitProfilFunction (e:React.FormEvent,setEditedProfil:Function) {
         e.preventDefault();
@@ -17,7 +17,7 @@ export function useHandleSubmitProfil(){
 
         if (!myProfil) {
     
-            const {error} = await supabase.from("myProfil").insert(newProfil).single()
+            const {error} = await supabase.from("myProfil").insert({...newProfil,email: session.user.email}).single()
         
             if (error) {
                 console.error("Error adding my profil: ",error.message);
@@ -39,7 +39,6 @@ export function useHandleSubmitProfil(){
                 setEditedProfil(true)
             )
         }
-    
         
     }
 
