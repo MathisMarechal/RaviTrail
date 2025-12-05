@@ -1,4 +1,6 @@
 import { useEffect, useState} from "react";
+import { updateRavitaillementItem } from "../supabase-client";
+import type { Items } from "../types";
 
 type Props = {
     getValue: () => any;
@@ -11,6 +13,8 @@ const EditableCellCheck = ({getValue, row, column, table}:Props) => {
     const initialValue = getValue();
     const [value,setValue] = useState(initialValue);
     const [openedWindow,setOpenedWindow] = useState(false);
+    const [updatedItemRavitaillement, setupdatedItemRavitaillement] = useState<Items>()
+
 
     const onBlur = () => {
         table.option.meta?.updateData(
@@ -20,7 +24,25 @@ const EditableCellCheck = ({getValue, row, column, table}:Props) => {
         )
     };
 
-    const updateValueState = (updatedValue:string) => {
+    const updateValueState = async (updatedValue:string) => {
+        const itemId = row.original.item.id;
+        try {
+            const NewItem = await updateRavitaillementItem(itemId, {
+                name: row.original.item.name,
+                proteine: row.original.item.proteine,
+                glucide: row.original.item.glucide,
+                quantity: row.original.item.quantity,
+                status: updatedValue
+                });
+
+                setupdatedItemRavitaillement(NewItem)
+        
+                console.log('✓ Item mis à jour en base');
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour:', error);
+                alert('Erreur lors de la sauvegarde des modifications');
+                return;
+        }
         setValue(updatedValue);
         setOpenedWindow(false);
     };

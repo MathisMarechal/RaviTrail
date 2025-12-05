@@ -38,6 +38,7 @@ export function Declaration () {
     const [distanceTotal, setDistanceTotal] = useState<number>(0);
     const [denivelePositif, setDenivelePositif] = useState<number>(0);
     const [deniveleNegatif, setDeniveleNegatif] = useState<number>(0);
+    const [projectName, setProjectName] = useState<string>("");
 
     // États pour les calculs entre ravitaillements
     const [distanceNextRavitos, setDistanceNextRavitos] = useState<number>(0);
@@ -94,7 +95,8 @@ export function Declaration () {
         distanceTotal, setDistanceTotal,
         denivelePositif, setDenivelePositif,
         deniveleNegatif, setDeniveleNegatif,
-            distanceNextRavitos, setDistanceNextRavitos,
+        projectName, setProjectName,
+        distanceNextRavitos, setDistanceNextRavitos,
         denivelePositifNextRavitos, setDenivelePositifNextRavitos,
         deniveleNegatifNextRavitos, setDeniveleNegatifNextRavitos,
         tempsEstime, setTempsEstime,
