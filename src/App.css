@@ -10,7 +10,7 @@ body {
 }
 
 .banner {
-    background-image: url("./image/raviImage.png");
+    background-image: url("/raviImage.png");
     background-size: cover;
     background-position: center;
     height: 450px; 
@@ -65,7 +65,7 @@ body {
 }
 
 .bannerMyProfil {
-    background-image: url("./image/sapinImage.jpg");
+    background-image: url("/sapinImage.jpg");
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -78,7 +78,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("./image/sapinImage.jpg") center/cover no-repeat;
+  background: url("/sapinImage.jpg") center/cover no-repeat;
   filter: blur(6px);
   transform: scale(1.05);
   z-index: 0;

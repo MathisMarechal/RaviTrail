@@ -35,7 +35,7 @@ function MyProfil() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     // États pour le changement de mot de passe
-    const [currentPassword, setCurrentPassword] = useState("");
+    const [, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");

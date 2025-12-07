@@ -73,7 +73,7 @@ function HomePage() {
         <>
             <div className="containerHomePage">
                 <video autoPlay loop muted playsInline className="background-clip">
-                    <source src="src/image/TrailBG1.mp4" type="video/mp4" />
+                    <source src="/TrailBG1.mp4" type="video/mp4" />
                 </video>
                 <header style={{ display: "flex", flexDirection: "column", justifyContent: "normal", width: "100%" }}>
                     <div className="d-flex justify-content-evenly" style={{ paddingBottom: "30px", paddingTop: "30px", backgroundColor: "#0D6EFD" }}>
