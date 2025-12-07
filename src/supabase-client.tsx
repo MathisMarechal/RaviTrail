@@ -10,10 +10,31 @@ import type {
     DBItemMaster
 } from './types';
 
+
+// DEBUG - Afficher les variables
+console.log('=== DEBUG SUPABASE ===');
+console.log('URL:', import.meta.env.VITE_SUPABASE_URL);
+console.log('KEY:', import.meta.env.VITE_SUPABASE_ANON_KEY);
+console.log('Toutes les env:', import.meta.env);
+console.log('=====================');
+
+// Vérifier si les variables existent
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl) {
+  console.error('❌ VITE_SUPABASE_URL est manquante !');
+}
+if (!supabaseKey) {
+  console.error('❌ VITE_SUPABASE_ANON_KEY est manquante !');
+}
+
 export const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  supabaseUrl || '',
+  supabaseKey || ''
 );
+
+
 
 export interface ProjectData {
     id?: number;
