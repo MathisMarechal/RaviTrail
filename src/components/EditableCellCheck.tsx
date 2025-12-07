@@ -13,7 +13,7 @@ const EditableCellCheck = ({getValue, row, column, table}:Props) => {
     const initialValue = getValue();
     const [value,setValue] = useState(initialValue);
     const [openedWindow,setOpenedWindow] = useState(false);
-    const [updatedItemRavitaillement, setupdatedItemRavitaillement] = useState<Items>()
+    const [, setupdatedItemRavitaillement] = useState<Items>()
 
 
     const onBlur = () => {
