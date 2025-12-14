@@ -21,11 +21,14 @@ export interface TotalStat {
     totalGlucide: [];
 }
 
+export type UserPlan = 'free' | 'premium';
+
 export interface Profil {
     id: number;
     name: string;
     consGlu: number | "";
     consProt: number | "";
+    plan?: UserPlan; // Ajout du plan
 }
 
 export interface SavedProject {
@@ -39,6 +42,8 @@ export interface SavedProject {
     xmlDoc: string;
     createdAt: Date;
     updatedAt: Date;
+    isShared?: boolean; // Pour les projets partagés
+    sharedBy?: string; // Email du propriétaire si partagé
 }
 
 export interface ListItems {
@@ -46,6 +51,15 @@ export interface ListItems {
     name: string;
     proteine: number;
     glucide: number;
+}
+
+export interface ProjectShare {
+    id: number;
+    project_id: number;
+    owner_email: string;
+    shared_with_email: string;
+    access_level: 'view' | 'edit';
+    created_at: string;
 }
 
 // Types pour la base de données
@@ -91,3 +105,29 @@ export interface DBItemMaster {
     created_at: string;
     updated_at: string;
 }
+
+// Limites des plans
+export const PLAN_LIMITS = {
+    free: {
+        maxProjects: 1,
+        features: {
+            gpxImport: true,
+            customItems: true,
+            basicNutrition: true,
+            advancedAnalytics: false,
+            pdfExport: false,
+            projectSharing: false
+        }
+    },
+    premium: {
+        maxProjects: Infinity,
+        features: {
+            gpxImport: true,
+            customItems: true,
+            basicNutrition: true,
+            advancedAnalytics: true,
+            pdfExport: true,
+            projectSharing: true
+        }
+    }
+} as const;

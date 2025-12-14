@@ -1,4 +1,5 @@
-import { BrowserRouter as Router,Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
 import HomePage from "./pages/HomePage";
 import EditPage from "./pages/EditPage";
 import MyProfil from "./pages/MyProfil";
@@ -10,67 +11,66 @@ import { useEffect } from "react";
 import { supabase } from "./supabase-client";
 import { useNavigate } from "react-router-dom";
 
-function AppRoutes () {
-
-  const {session,setSession} = useMyContext();
+function AppRoutes() {
+  const { session, setSession } = useMyContext();
   const navigate = useNavigate();
 
   const fetchSession = async () => {
     const currentSession = await supabase.auth.getSession();
     console.log(currentSession);
     setSession(currentSession.data.session);
-  }
+  };
 
-  useEffect(()=>{
-    fetchSession()
+  useEffect(() => {
+    fetchSession();
 
-    const {data: authListener} = supabase.auth.onAuthStateChange((_event,session)=> {
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) {
-        navigate("/");
-      } else {
-        navigate("/LoginPage");
+        // Rediriger vers HomePage quand connecté
+        navigate("/home");
       }
     });
 
     return () => {
       authListener.subscription.unsubscribe();
-    }
+    };
+  }, []);
 
-  },[]);
-
-  return(
+  return (
     <Routes>
-    {session ? (
-      <>
-      <Route path="/" element={<HomePage/>}></Route>
-      <Route path="/LoginPage" element={<LoginPage/>}></Route>
-      <Route path="/EditPage" element={<EditPage/>}></Route>
-      <Route path="/MyProfil" element={<MyProfil />}></Route>
-      <Route path="/Items" element={<Items/>}></Route>
-      <Route path="/RecapPage" element={<RecapPage />}></Route>
-      </>
-    )
-    :
-    (
-      <>  
-      <Route path="/" element={<LoginPage/>}></Route>
-      <Route path="/LoginPage" element={<LoginPage/>}></Route>
-      </>
-    )
-        
-    }
-      </Routes>
-  )
+      {session ? (
+        // Routes pour utilisateurs connectés
+        <>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/EditPage" element={<EditPage />} />
+          <Route path="/MyProfil" element={<MyProfil />} />
+          <Route path="/Items" element={<Items />} />
+          <Route path="/RecapPage" element={<RecapPage />} />
+          <Route path="/LoginPage" element={<Navigate to="/home" replace />} />
+          <Route path="*" element={<Navigate to="/home" replace />} />
+        </>
+      ) : (
+        // Routes pour utilisateurs non connectés
+        <>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </>
+      )}
+    </Routes>
+  );
 }
 
 function App() {
-  return (<ContextProvider>
+  return (
+    <ContextProvider>
       <Router>
         <AppRoutes />
       </Router>
     </ContextProvider>
-  )
-};
+  );
+}
 
 export default App;

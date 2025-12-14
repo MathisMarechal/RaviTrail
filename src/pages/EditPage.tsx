@@ -2,10 +2,15 @@ import DragAndDrop from "../components/DragAndDrop";
 import EditGpx from "../components/EditGpx";
 import EditTable from "../components/EditTable";
 import CalculOfTrack from "../components/calculOfTrack";
-import { useLocation, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import ExportPDF from "../components/ExportPDF";
+import ShareProject from "../components/ShareProject";
+import AdvancedAnalytics from "../components/AdvancedAnalytics";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../context/Context";
 import { autoSaveProject, forceSaveProject } from "../supabase-client";
+import { PLAN_LIMITS } from "../types";
 
 function EditPage() {
     const {
@@ -41,10 +46,11 @@ function EditPage() {
         setCurrentProject,
         savedProjects,
         setSavedProjects,
+        userPlan,
+        session
     } = useMyContext();
 
     const navigate = useNavigate();
-    const location = useLocation();
 
     const [projectName, setProjectName] = useState<string>("");
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -52,7 +58,9 @@ function EditPage() {
     const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
     const [needToBeSave, setNeedToBeSave] = useState<boolean>(false);
 
-    // Charger le projet au montage
+    const isPremium = userPlan === 'premium';
+    const features = PLAN_LIMITS[userPlan].features;
+
     useEffect(() => {
         if (currentProject) {
             setProjectName(currentProject.name);
@@ -74,12 +82,8 @@ function EditPage() {
         }
     }, [currentProject]);
 
-    // Sauvegarde automatique quand les données changent
     useEffect(() => {
-        // Ne pas sauvegarder si le nom du projet est vide
         if (!projectName.trim()) return;
-
-        // Ne pas sauvegarder au premier chargement
         if (!currentProject && ravitos.length === 0) return;
         if (isAutoSaving) return;
 
@@ -102,20 +106,16 @@ function EditPage() {
             projectData,
             ravitos,
             (savedProject) => {
-                // Mettre a  jour le projet courant
                 setCurrentProject(savedProject);
                 setLastSaved(new Date());
                 setIsSaving(true);
                 
-                // Mettre a  jour la liste des projets
                 if (currentProject) {
-                    // Mise a  jour d'un projet existant
                     const updatedProjects = savedProjects.map(p =>
                         p.id === currentProject.id ? savedProject : p
                     );
                     setSavedProjects(updatedProjects);
                 } else {
-                    // Ajout d'un nouveau projet
                     setSavedProjects([...savedProjects, savedProject]);
                 }
                 
@@ -123,11 +123,10 @@ function EditPage() {
                 setIsAutoSaving(false);
                 setNeedToBeSave(false);
             },
-            300000 // Délai de 2 secondes
+            300000
         );
 
     }, [projectName, ravitos, distanceTotal, denivelePositif, deniveleNegatif, nameRun]);
-
 
     const resetProject = () => {
         setProjectName("");
@@ -154,16 +153,6 @@ function EditPage() {
         setAllEl([]);
         setAllDistance([]);
         setLastSaved(null);
-
-        console.log("Rénitialisation complete du projet");
-    };
-
-    const handleBackToHome = () => {
-        navigate("/");
-    };
-
-    const handleBackToProfil = () => {
-        navigate("/MyProfil");
     };
 
     const formatLastSaved = () => {
@@ -171,7 +160,7 @@ function EditPage() {
         const now = new Date();
         const diff = Math.floor((now.getTime() - lastSaved.getTime()) / 1000);
         
-        if (diff < 60) return "a l'instant";
+        if (diff < 60) return "à l'instant";
         if (diff < 3600) return `il y a ${Math.floor(diff / 60)} min`;
         return new Intl.DateTimeFormat('fr-FR', {
             hour: '2-digit',
@@ -181,9 +170,8 @@ function EditPage() {
 
     const handleSaveProject = async () => {
         if (!projectName.trim()) return;
-        setIsSaving(true)
+        setIsSaving(true);
         const xmlString = xmlDoc ? new XMLSerializer().serializeToString(xmlDoc) : "";
-
 
         const projectData = {
             name: projectName,
@@ -214,39 +202,43 @@ function EditPage() {
                 setIsSaving(false);
                 setNeedToBeSave(false);
             }
-        )
+        );
     };
+
+    const currentProjectForExport = currentProject ? {
+        ...currentProject,
+        ravitos,
+        distanceTotal,
+        denivelePositif,
+        deniveleNegatif
+    } : null;
 
     return (
         <div>
-            <div className="d-flex justify-content-evenly" style={{ paddingBottom: "30px", paddingTop: "30px", backgroundColor: "#0D6EFD" }}>
-                <div style={{ cursor: "pointer", textDecoration: location.pathname === "/" ? "underline" : "none", color: "white", fontWeight: "bold" }} onClick={handleBackToHome}>Home</div>
-                <div style={{ color: "white", fontWeight: "bold" }}>RaviTrail</div>
-                <div style={{ cursor: "pointer", textDecoration: location.pathname === "/MyProfil" ? "underline" : "none", color: "white", fontWeight: "bold" }} onClick={handleBackToProfil}>Profil</div>
-            </div>
+            <Header isAuthenticated={true} />
 
             <div className="card p-3 m-2 border">
                 <div className="row align-items-center">
-                    <div className="col-md-8">
+                    <div className="col-md-6">
                         <label className="form-label">Nom du projet</label>
                         <input 
                             type="text" 
                             className="form-control" 
-                            placeholder="Entrez le nom de votre projet de ravitaillement" 
+                            placeholder="Entrez le nom de votre projet" 
                             value={projectName} 
                             onChange={(e) => setProjectName(e.target.value)} 
                         />
                     </div>
-                    <div className="col-md-4 text-end">
+                    <div className="col-md-6 text-end">
                         <div className="mt-4">
                             {isSaving ? (
                                 <span className="text-muted">
-                                    <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    <span className="spinner-border spinner-border-sm me-2"></span>
                                     Sauvegarde...
                                 </span>
                             ) : lastSaved ? (
                                 <span className="text-success">
-                                    Sauvegardé {formatLastSaved()}
+                                    ✓ Sauvegardé {formatLastSaved()}
                                 </span>
                             ) : (
                                 <span className="text-muted">Pas encore sauvegardé</span>
@@ -264,9 +256,80 @@ function EditPage() {
 
             <EditTable />
 
-            <div style={{display:"flex",alignItems:"center", justifyContent:"center"}}>
-                <button className={`btn ${!needToBeSave ? 'btn-success' : 'btn-primary'} mt-4 mb-4`} onClick={()=>handleSaveProject()} disabled={!projectName.trim()}>{!needToBeSave?'✓ Sauvegardé' : 'Sauvegarder'}</button>
-                <button className="btn btn-info mt-4 ms-4 mb-4 text-white" onClick={()=>navigate("/RecapPage")}>Racap</button>
+            <div style={{display:"flex", alignItems:"center", justifyContent:"center", gap: "10px", flexWrap: "wrap", padding: "20px"}}>
+                <button 
+                    className={`btn ${!needToBeSave ? 'btn-success' : 'btn-primary'}`}
+                    onClick={handleSaveProject}
+                    disabled={!projectName.trim()}
+                >
+                    {!needToBeSave ? '✓ Sauvegardé' : '💾 Sauvegarder'}
+                </button>
+
+                <button 
+                    className="btn btn-info text-white"
+                    onClick={() => navigate("/RecapPage")}
+                >
+                    📋 Récap
+                </button>
+
+                {/* Boutons Premium */}
+                {currentProjectForExport && (
+                    <>
+                        {features.pdfExport ? (
+                            <ExportPDF project={currentProjectForExport} />
+                        ) : (
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                    alert("🔒 Export PDF disponible en Premium");
+                                    navigate("/MyProfil");
+                                }}
+                            >
+                                🔒 Export PDF
+                            </button>
+                        )}
+
+                        {features.projectSharing ? (
+                            <ShareProject 
+                                project={currentProjectForExport} 
+                                ownerEmail={session?.user?.email || ""}
+                            />
+                        ) : (
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                    alert("🔒 Partage de projets disponible en Premium");
+                                    navigate("/MyProfil");
+                                }}
+                            >
+                                🔒 Partager
+                            </button>
+                        )}
+
+                        {features.advancedAnalytics ? (
+                            <AdvancedAnalytics project={currentProjectForExport} />
+                        ) : (
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                    alert("🔒 Analyses avancées disponibles en Premium");
+                                    navigate("/MyProfil");
+                                }}
+                            >
+                                🔒 Analyses
+                            </button>
+                        )}
+                    </>
+                )}
+
+                {!isPremium && (
+                    <button
+                        className="btn btn-warning"
+                        onClick={() => navigate("/MyProfil")}
+                    >
+                        ⭐ Passer à Premium
+                    </button>
+                )}
             </div>
         </div>
     );

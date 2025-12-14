@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/Context";
 import { updateRavitaillementItem } from "../supabase-client";
+import Header from "../components/Header";
 import type { Items } from "../types";
 
 type EditingCell = {
@@ -24,7 +25,6 @@ function Recap() {
     const [filterStatus, setFilterStatus] = useState<string>("");
     const [filterRavito, setFilterRavito] = useState<string>("");
     const navigate = useNavigate();
-    const location = useLocation();
 
     const openEditCell = (ravitoIndex: number, itemIndex: number, item: Items, field: EditingCell['field']) => {
         const value = item[field];
@@ -38,14 +38,12 @@ function Recap() {
         const finalValue = valueToSave !== undefined ? valueToSave : editValue;
 
         try {
-            // 1. Mettre à jour en base de données
             await updateRavitaillementItem(editingCell.item.id!, {
                 [editingCell.field]: editingCell.field === 'name' || editingCell.field === 'status' 
                     ? finalValue 
                     : Number(finalValue)
             });
 
-            // 2. Mettre à jour le contexte
             const updatedRavitos = [...ravitos];
             updatedRavitos[editingCell.ravitoIndex].items[editingCell.itemIndex] = {
                 ...updatedRavitos[editingCell.ravitoIndex].items[editingCell.itemIndex],
@@ -67,7 +65,6 @@ function Recap() {
         await handleSaveCell(status);
     };
 
-    // Filtrer les données
     const filteredData = ravitos.flatMap((ravito, ravitoIndex) =>
         ravito.items
             .filter(item => {
@@ -95,135 +92,174 @@ function Recap() {
         return labels[field] || field;
     };
 
+    const stats = {
+        total: filteredData.length,
+        enCours: filteredData.filter(d => d.item.status === 'En cours').length,
+        achete: filteredData.filter(d => d.item.status === 'Acheté').length,
+        prepare: filteredData.filter(d => d.item.status === 'Préparé').length
+    };
+
     return (
         <>
-            <div className="d-flex justify-content-evenly" style={{ 
-                paddingBottom: "30px", 
-                paddingTop: "30px", 
-                backgroundColor: "#0D6EFD", 
-                position: "relative", 
-                zIndex: 1 
-            }}>
-                <div 
-                    style={{ 
-                        cursor: "pointer", 
-                        textDecoration: location.pathname === "/EditPage" ? "underline" : "none", 
-                        color: "white", 
-                        fontWeight: "bold" 
-                    }} 
-                    onClick={() => navigate("/EditPage")}
-                >
-                    Ravitaillement
-                </div>
-                <div style={{ color: "white", fontWeight: "bold" }}>RaviTrail</div>
-                <div 
-                    style={{ 
-                        cursor: "pointer", 
-                        textDecoration: location.pathname === "/MyProfil" ? "underline" : "none", 
-                        color: "white", 
-                        fontWeight: "bold" 
-                    }} 
-                    onClick={() => navigate("/MyProfil")}
-                >
-                    Profil
+            <Header isAuthenticated={true} />
+
+            <div style={{ padding: "20px", minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
+                <div className="container">
+                    <div className="card border-0 shadow-lg mb-4">
+                        <div className="card-header bg-primary text-white py-3">
+                            <h3 className="mb-0">📋 Récapitulatif de préparation</h3>
+                        </div>
+                        <div className="card-body p-4">
+                            {/* Stats */}
+                            <div className="row mb-4">
+                                <div className="col-md-3 col-6 mb-3">
+                                    <div className="card bg-light">
+                                        <div className="card-body text-center">
+                                            <h2 className="mb-0">{stats.total}</h2>
+                                            <small className="text-muted">Total items</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-3 col-6 mb-3">
+                                    <div className="card bg-danger text-white">
+                                        <div className="card-body text-center">
+                                            <h2 className="mb-0">{stats.enCours}</h2>
+                                            <small>En cours</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-3 col-6 mb-3">
+                                    <div className="card bg-warning text-dark">
+                                        <div className="card-body text-center">
+                                            <h2 className="mb-0">{stats.achete}</h2>
+                                            <small>Acheté</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-3 col-6 mb-3">
+                                    <div className="card bg-success text-white">
+                                        <div className="card-body text-center">
+                                            <h2 className="mb-0">{stats.prepare}</h2>
+                                            <small>Préparé</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Filtres */}
+                            <div className="row mb-3">
+                                <div className="col-md-6 mb-2">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="🔍 Filtrer par nom de ravitaillement..."
+                                        value={filterRavito}
+                                        onChange={(e) => setFilterRavito(e.target.value)}
+                                    />
+                                </div>
+                                <div className="col-md-6 mb-2">
+                                    <select
+                                        className="form-select"
+                                        value={filterStatus}
+                                        onChange={(e) => setFilterStatus(e.target.value)}
+                                    >
+                                        <option value="">📊 Tous les statuts</option>
+                                        <option value="En cours">🔴 En cours</option>
+                                        <option value="Acheté">🟡 Acheté</option>
+                                        <option value="Préparé">🟢 Préparé</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Table */}
+                            <div className="table-responsive">
+                                <table className="table table-hover table-bordered align-middle text-center">
+                                    <thead className="table-light">
+                                        <tr>
+                                            <th scope="col">Ravitaillement</th>
+                                            <th scope="col">Distance</th>
+                                            <th scope="col">Item</th>
+                                            <th scope="col">Protéines</th>
+                                            <th scope="col">Glucides</th>
+                                            <th scope="col">Quantité</th>
+                                            <th scope="col">Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredData.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={7} className="py-5">
+                                                    <div style={{ fontSize: "3rem" }}>🔍</div>
+                                                    <p className="text-muted mb-0">Aucun item à afficher</p>
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            filteredData.map((row, index) => (
+                                                <tr key={`${row.ravitoIndex}-${row.itemIndex}-${index}`}>
+                                                    <td className="fw-bold">{row.ravitoName}</td>
+                                                    <td>{row.ravitoDistance.toFixed(1)} km</td>
+                                                    <td 
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'name')}
+                                                        className="hover-cell"
+                                                    >
+                                                        {row.item.name}
+                                                    </td>
+                                                    <td 
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'proteine')}
+                                                        className="hover-cell"
+                                                    >
+                                                        {row.item.proteine}g
+                                                    </td>
+                                                    <td 
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'glucide')}
+                                                        className="hover-cell"
+                                                    >
+                                                        {row.item.glucide}g
+                                                    </td>
+                                                    <td 
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'quantity')}
+                                                        className="hover-cell"
+                                                    >
+                                                        {row.item.quantity}
+                                                    </td>
+                                                    <td>
+                                                        <span 
+                                                            className={`badge ${
+                                                                row.item.status === 'En cours' ? 'bg-danger' :
+                                                                row.item.status === 'Acheté' ? 'bg-warning text-dark' :
+                                                                'bg-success'
+                                                            }`}
+                                                            style={{ cursor: "pointer" }}
+                                                            onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'status')}
+                                                        >
+                                                            {row.item.status}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="text-center mt-3">
+                                <button 
+                                    className="btn btn-primary"
+                                    onClick={() => navigate("/EditPage")}
+                                >
+                                    ← Retour au projet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div style={{ marginTop: "10px", marginLeft: "10px" }}>
-                {/* Filtres */}
-                <div className="row mb-3" style={{ marginRight: "10px" }}>
-                    <div className="col-md-6">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Filtrer par nom de ravitaillement..."
-                            value={filterRavito}
-                            onChange={(e) => setFilterRavito(e.target.value)}
-                        />
-                    </div>
-                    <div className="col-md-6">
-                        <select
-                            className="form-select"
-                            value={filterStatus}
-                            onChange={(e) => setFilterStatus(e.target.value)}
-                        >
-                            <option value="">Tous les statuts</option>
-                            <option value="En cours">En cours</option>
-                            <option value="Acheté">Acheté</option>
-                            <option value="Préparé">Préparé</option>
-                        </select>
-                    </div>
-                </div>
-
-                {/* Table */}
-                <div>
-                    <table className="table table-striped table-hover table-bordered align-middle text-center shadow-sm rounded">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nom</th>
-                                <th scope="col">Distance</th>
-                                <th scope="col">Nom de l'item</th>
-                                <th scope="col">Proteine</th>
-                                <th scope="col">Glucide</th>
-                                <th scope="col">Quantité</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredData.length === 0 ? (
-                                <tr>
-                                    <td colSpan={7}>Aucun item à afficher</td>
-                                </tr>
-                            ) : (
-                                filteredData.map((row, index) => (
-                                    <tr className="tr" key={`${row.ravitoIndex}-${row.itemIndex}-${index}`}>
-                                        <td scope="row">{row.ravitoName}</td>
-                                        <td scope="row">{row.ravitoDistance.toFixed(2)}</td>
-                                        <td 
-                                            scope="row"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'name')}
-                                        >
-                                            {row.item.name}
-                                        </td>
-                                        <td 
-                                            scope="row"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'proteine')}
-                                        >
-                                            {row.item.proteine}
-                                        </td>
-                                        <td 
-                                            scope="row"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'glucide')}
-                                        >
-                                            {row.item.glucide}
-                                        </td>
-                                        <td 
-                                            scope="row"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'quantity')}
-                                        >
-                                            {row.item.quantity}
-                                        </td>
-                                        <td scope="row">
-                                            <div 
-                                                style={{ cursor: "pointer" }} 
-                                                onClick={() => openEditCell(row.ravitoIndex, row.itemIndex, row.item, 'status')}
-                                            >
-                                                {row.item.status}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* Modal d'édition d'une cellule */}
+            {/* Modal d'édition */}
             {editingCell && (
                 <div 
                     className="modal d-flex align-items-center justify-content-center" 
@@ -323,6 +359,12 @@ function Recap() {
                     </div>
                 </div>
             )}
+
+            <style>{`
+                .hover-cell:hover {
+                    background-color: #e9ecef;
+                }
+            `}</style>
         </>
     );
 }
